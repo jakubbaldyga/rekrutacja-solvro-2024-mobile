@@ -3,8 +3,6 @@ import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 import 'package:solvro_cocktails/DataStructures/DataManagerSingleton.dart';
 import 'package:solvro_cocktails/MainPage/CocktailGrid.dart';
 
-import 'DetailSheet.dart';
-
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 

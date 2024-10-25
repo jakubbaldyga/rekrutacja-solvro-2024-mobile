@@ -4,6 +4,7 @@ import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 class CocktailSet {
   List<Cocktail> _cocktails = [];
 
+
   void addCocktails(List<Cocktail> cocktails) {
     _cocktails.addAll(cocktails);
   }

@@ -8,7 +8,7 @@ import 'CocktailTile/CocktailTile.dart';
 class CocktailGrid extends StatefulWidget {
 
   List<Cocktail> cocktails;
-  static const double magicOffset = 22.7; //works on every machine i tried... dunno why
+  static const double magicOffset = 22.7; //works on every machine i tried... dunno why XD
   final ScrollController scrollController;
   int gridIndice;
 

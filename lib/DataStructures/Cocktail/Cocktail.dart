@@ -41,6 +41,11 @@ class Cocktail {
         );
     }
 
+    void addIngredient(int id) {
+        ingredientsIds.add(id);
+    }
+
+    List<int> ingredientsIds = [];
     final int id;
     final String name;
     final CocktailCategory category;

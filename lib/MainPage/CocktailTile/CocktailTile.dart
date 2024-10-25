@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
-import '../DetailSheet.dart';
+import '../DetailSheet/DetailSheet.dart';
 
 class CocktailTile extends StatelessWidget {
   final Cocktail cocktail;
