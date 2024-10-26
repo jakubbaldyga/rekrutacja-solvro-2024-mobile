@@ -7,6 +7,7 @@ class CocktailTile extends StatelessWidget {
   final Cocktail cocktail;
   final double size;
   final BuildContext context;
+  final double scaleFactor = 1/384;
 
   const CocktailTile({
     required this.cocktail,
@@ -41,6 +42,7 @@ class CocktailTile extends StatelessWidget {
   }
 
   Widget _content(Cocktail cocktail, double size) {
+    print(size);
     return _imageContent(
       width: size,
       height: size,
@@ -49,7 +51,7 @@ class CocktailTile extends StatelessWidget {
         child: Text(
           cocktail.name,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: Colors.grey, fontSize: 20),
+          style: TextStyle(color: Colors.grey, fontSize: 30 * size*scaleFactor ),
         ),
       ),
     );
@@ -61,7 +63,7 @@ class CocktailTile extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15), // Rounded edges
+          borderRadius: BorderRadius.circular(15 * size*scaleFactor), // Rounded edges
           image: DecorationImage(
             image: cocktail.image, // Ensure this URL is valid
             fit: BoxFit.cover,
@@ -80,7 +82,7 @@ class CocktailTile extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12 * size/384),
           ),
           child: child,
         ),

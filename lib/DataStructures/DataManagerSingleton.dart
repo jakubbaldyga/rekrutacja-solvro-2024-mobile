@@ -9,8 +9,11 @@ class DataManagerSingleton {
   static DataManagerSingleton _instance = DataManagerSingleton();
 
   int _loadingCount = 0;
-  int currentPage = 0;
+  int currentPage = 0
   CocktailSet _currentCocktailSet = CocktailSet();
+
+
+
   double _screenWidth = 0;
 
   List<String> _cocktailNames = [];
@@ -29,7 +32,7 @@ class DataManagerSingleton {
 
   void loadNextCocktails() async {
     _loadingCount++;
-    var cocktails = await ApiService.fetchCocktails(++currentPage, 48);
+    var cocktails = await ApiService.fetchCocktails(++currentPage, 24);
 
     _currentCocktailSet.addCocktails(cocktails);
 

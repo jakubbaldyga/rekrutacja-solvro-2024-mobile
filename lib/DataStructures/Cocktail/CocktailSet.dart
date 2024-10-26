@@ -2,26 +2,25 @@
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 
 class CocktailSet {
-  List<Cocktail> _cocktails = [];
+  // id -> Cocktail
+  Map<int, Cocktail> _cocktails = [];
 
 
   void addCocktails(List<Cocktail> cocktails) {
-    _cocktails.addAll(cocktails);
+    for (var cocktail in cocktails) {
+      _cocktails[cocktail.id] = cocktail;
+    }
   }
 
   void addCocktail(Cocktail cocktail) {
-    _cocktails.add(cocktail);
+    _cocktails[cocktail.id] = cocktail;
   }
 
-  Cocktail findCocktailById(String id) {
-    return _cocktails.where((cocktail) => cocktail.id == id).first;
+  Cocktail findCocktailById(int id) {
+    return _cocktails[id]!;
   }
 
-  List<Cocktail> getCocktails() {
+  Map<int, Cocktail> getCocktails() {
     return _cocktails;
-  }
-
-  Cocktail getCocktail(int index) {
-    return _cocktails[index];
   }
 }

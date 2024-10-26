@@ -17,7 +17,6 @@ class _InfiniteScrollExampleState extends State<MainPage> {
   int gridIndice = 2;
   @override
   void initState() {
-    print("MainPage initState");
     super.initState();
     cocktails = DataManagerSingleton.getInstance().getCocktailSet().getCocktails();
     print(cocktails);
@@ -71,45 +70,3 @@ class _InfiniteScrollExampleState extends State<MainPage> {
 
   }
 }
-
-//      body: ListView.builder(
-//         controller: _scrollController,
-//         itemCount: cocktails.length + (isLoadingMore ? 1 : 0),
-//         itemBuilder: (context, index) {
-//           if (index == cocktails.length) {
-//             return Center(
-//               child: Padding(
-//                 padding: EdgeInsets.all(16),
-//                 child: CircularProgressIndicator(),
-//               ),
-//             );
-//           }
-//           return ListTile(
-//             onTap: () {
-//               showModalBottomSheet(
-//                 context: context,
-//                 isScrollControlled: true,
-//                 backgroundColor: Colors.transparent,
-//                 builder: (context) {
-//                   return FractionallySizedBox(
-//                     child: DetailBottomSheet(cocktails[index]),
-//                   );
-//                 },
-//               );
-//             },
-//             title: Container(
-//               padding: EdgeInsets.symmetric(vertical: 8.0), // Adjust padding as needed
-//               decoration: BoxDecoration(
-//                 color: Colors.blueAccent, // Change color as needed
-//                 borderRadius: BorderRadius.circular(8.0), // Adjust border radius
-//               ),
-//               child: Text(
-//                 cocktails[index].name,
-//                 textAlign: TextAlign.center,
-//                 style: TextStyle(color: Colors.white), // Change text color as needed
-//               ),
-//             )
-//           );
-//         },
-//       ),
-//     );
