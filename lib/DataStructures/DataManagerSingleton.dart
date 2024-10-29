@@ -5,18 +5,27 @@ import 'package:solvro_cocktails/DataStructures/Ingredient/Ingredient.dart';
 
 import 'Cocktail/Cocktail.dart';
 
+enum Mode{
+  Default,
+  Search,
+  Count
+}
+
 class DataManagerSingleton {
   static DataManagerSingleton _instance = DataManagerSingleton();
 
   int _loadingCount = 0;
-  int currentPage = 0
-  CocktailSet _currentCocktailSet = CocktailSet();
+  int bandwith = 50;
+  CocktailSet _cocktailSet = CocktailSet();
 
+  List<Cocktail> defultCocktails = [];
+  List<Cocktail> currentCocktailSet = [];
 
 
   double _screenWidth = 0;
 
-  List<String> _cocktailNames = [];
+  String prevSearch = "";
+  int mode = 0;
 
   static DataManagerSingleton getInstance() {
     return _instance;
@@ -30,29 +39,80 @@ class DataManagerSingleton {
     return _screenWidth;
   }
 
-  void loadNextCocktails() async {
-    _loadingCount++;
-    var cocktails = await ApiService.fetchCocktails(++currentPage, 24);
 
-    _currentCocktailSet.addCocktails(cocktails);
+  Future<void> loadBySearch(String search) async {
+    // Ensure only one instance is loading at a time
+    if (_loadingCount > 0) return;
 
-    for (var cocktail in cocktails) {
-      _cocktailNames.add(cocktail.name);
+    if(search == "") {
+      loadNextCocktails();
+      return;
     }
 
-    _loadingCount--;
+    if(prevSearch == search) {
+      return;
+    }
+
+    prevSearch = search;
+    currentCocktailSet = [];
+
+    _loadingCount++;
+    try {
+      // Fetch cocktails
+      if(mode == 0) {
+        currentCocktailSet = [];
+        _cocktailSet = CocktailSet();
+        mode = 1;
+      }
+      var cocktails = await ApiService.fetchCocktailsBySearch( (currentCocktailSet.length / bandwith).floor()+1, bandwith, search);
+
+      // Add cocktails if any are returned
+      if (cocktails.isNotEmpty) {
+        _cocktailSet.addCocktails(cocktails);
+        currentCocktailSet += cocktails;
+      } else {
+        print("No more cocktails to load.");
+      }
+    } finally {
+      _loadingCount--;
+    }
   }
+
+  void loadNextCocktails() async {
+    // Ensure only one instance is loading at a time
+    if (_loadingCount > 0) return;
+
+    _loadingCount++;
+    try {
+      if(mode == 1) {
+        currentCocktailSet = defultCocktails;
+        mode = 0;
+        return;
+      }
+      // Fetch cocktails
+      int nextPage = (currentCocktailSet.length / bandwith).floor() + 1;
+      var cocktails = await ApiService.fetchCocktails(nextPage, bandwith);
+
+      // Add cocktails if any are returned
+      if (cocktails.isNotEmpty) {
+        _cocktailSet.addCocktails(cocktails);
+        currentCocktailSet += cocktails;
+        defultCocktails += cocktails;
+      } else {
+        print("No more cocktails to load.");
+      }
+    } finally {
+      _loadingCount--;
+    }
+  }
+
 
   bool isBusy() {
     return _loadingCount > 0;
   }
 
-  List<String> getCocktailNames() {
-    return _cocktailNames;
-  }
-
   CocktailSet getCocktailSet() {
-    return _currentCocktailSet;
+    return _cocktailSet;
   }
 
   List<Ingredient> getIngredients(Cocktail cocktail) {

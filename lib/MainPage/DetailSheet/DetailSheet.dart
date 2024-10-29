@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
-import 'package:solvro_cocktails/DataStructures/Cocktail/CocktailCategoryEnum.dart';
 import 'package:solvro_cocktails/DataStructures/DataManagerSingleton.dart';
 import 'package:solvro_cocktails/DataStructures/Ingredient/Ingredient.dart';
 

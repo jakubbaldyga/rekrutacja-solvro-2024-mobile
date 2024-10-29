@@ -14,6 +14,7 @@ class ApiService {
   static Map<int, Ingredient> _ingredients = {};
 
   static Future<List<Cocktail>> fetchCocktails(int page, int howMany) async {
+    print('fetching page $page with $howMany items');
     final data = await _fetchData('https://cocktails.solvro.pl/api/v1/cocktails?page=$page&perPage=$howMany');
 
     final jsonResponse = json.decode(data);
@@ -33,7 +34,7 @@ class ApiService {
         map.add(_cocktails[json['id']]!);
       }
     }
-
+    print('fetched ${map.length} items');
     return map;
   }
 
@@ -64,6 +65,31 @@ class ApiService {
     } else {
       throw Exception('Failed to load data');
     }
+  }
+
+  static Future<List<Cocktail>> fetchCocktailsBySearch(int page, int howMany, String search) async {
+    print('fetching page $page with $howMany items');
+    print('https://cocktails.solvro.pl/api/v1/cocktails?name=$search&page=$page&perPage=$howMany');
+    final data = await _fetchData('https://cocktails.solvro.pl/api/v1/cocktails?name=$search&page=$page&perPage=$howMany');
+    final jsonResponse = json.decode(data);
+
+    final List<dynamic> jsonList = jsonResponse['data'];
+
+    // Map the list of JSON to List<Cocktail>
+    var map = <Cocktail>[];
+    for(var json in jsonList) {
+      if(!_cocktails.containsKey(json['id'])) {
+        var cocktail = Cocktail.fromJson(json);
+        await _fetchIngredients(cocktail);
+        _cocktails[cocktail.id] = cocktail;
+        map.add(cocktail);
+      }
+      else {
+        map.add(_cocktails[json['id']]!);
+      }
+    }
+    print('fetched ${map.length} items');
+    return map;
   }
 
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image/flutter_image.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 import '../DetailSheet/DetailSheet.dart';
 
@@ -42,7 +43,6 @@ class CocktailTile extends StatelessWidget {
   }
 
   Widget _content(Cocktail cocktail, double size) {
-    print(size);
     return _imageContent(
       width: size,
       height: size,
@@ -65,7 +65,7 @@ class CocktailTile extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15 * size*scaleFactor), // Rounded edges
           image: DecorationImage(
-            image: cocktail.image, // Ensure this URL is valid
+            image:  NetworkImageWithRetry(cocktail.imageURL),
             fit: BoxFit.cover,
           ),
     ),

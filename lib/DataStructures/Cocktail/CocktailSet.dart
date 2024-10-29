@@ -3,7 +3,7 @@ import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 
 class CocktailSet {
   // id -> Cocktail
-  Map<int, Cocktail> _cocktails = [];
+  Map<int, Cocktail> _cocktails = {};
 
 
   void addCocktails(List<Cocktail> cocktails) {

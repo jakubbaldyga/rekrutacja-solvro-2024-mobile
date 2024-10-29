@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:solvro_cocktails/ApiService.dart';
-import 'package:solvro_cocktails/DataStructures/Cocktail/CocktailSet.dart';
 import 'package:solvro_cocktails/DataStructures/DataManagerSingleton.dart';
 
 import '../MainPage/MainPage.dart';
