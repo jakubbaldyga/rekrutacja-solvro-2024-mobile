@@ -1,14 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
 
-import '../DataStructures/Cocktail/Cocktail.dart';
 import 'CocktailTile/AnimatedCocktailTile.dart';
 import 'CocktailTile/CocktailTile.dart';
 import 'ICocktailGridProvider.dart';
 
 class CocktailGrid extends StatefulWidget {
 
-  List<Cocktail> cocktails;
+  List<int> cocktailsIds;
   static const double magicOffset = 22.7; //works on every machine i tried... dunno why XD
   final ScrollController scrollController;
   int gridIndice;
@@ -18,7 +18,7 @@ class CocktailGrid extends StatefulWidget {
   static final List<int> gridOptions = [1, 2, 3];
   static final List<double> tileSizes = [];
 
-  CocktailGrid(this.cocktails, this.gridIndice, this.scrollController, this.provider);
+  CocktailGrid(this.cocktailsIds, this.gridIndice, this.scrollController, this.provider);
 
   static void changeGridCount(gridIndice) {
       gridIndice-=1;
@@ -73,7 +73,7 @@ class _CocktailGrid extends State<CocktailGrid> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.cocktails.isEmpty)
+    if(widget.cocktailsIds.isEmpty)
       return Align(
           alignment: Alignment(0, 0),
           child:
@@ -88,7 +88,7 @@ class _CocktailGrid extends State<CocktailGrid> {
           initTileSizes(constraints.maxWidth);
           double tileOffset = (CocktailGrid.tileSizes[widget.gridIndice] + CocktailGrid.spacing);
           // Calculate total grid height based on number of rows and spacing
-          double totalHeight = ((widget.cocktails.length / CocktailGrid.gridOptions[widget.gridIndice]).ceil() * tileOffset);
+          double totalHeight = ((widget.cocktailsIds.length / CocktailGrid.gridOptions[widget.gridIndice]).ceil() * tileOffset);
           if (widget.provider.isLoadingMore()) {
             totalHeight += 60; // Adjust this height based on the loading indicator size
           }
@@ -103,7 +103,7 @@ class _CocktailGrid extends State<CocktailGrid> {
               children: [
                 Expanded(
                   child: Stack(
-                    children: List.generate(widget.cocktails.length, (index) {
+                    children: List.generate(widget.cocktailsIds.length, (index) {
 
                       int row = index ~/ CocktailGrid.gridOptions[widget.gridIndice];
                       double top = row * tileOffset - (CocktailGrid.tileSizes[0] - CocktailGrid.tileSizes[widget.gridIndice]) / 2;
@@ -120,13 +120,13 @@ class _CocktailGrid extends State<CocktailGrid> {
 
 
                       // Load more cocktails when reaching the end
-                      if (false && !widget.provider.isLoadingMore() && index > widget.cocktails.length - 12) {
+                      if (false && !widget.provider.isLoadingMore() && index > widget.cocktailsIds.length - 12) {
                         widget.provider.loadMoreCocktails();
                       }
 
                       return AnimatedCocktailTile(
                         cocktailTile: CocktailTile(
-                          cocktail: widget.cocktails[index],
+                          cocktail: DataManagerSingleton.getInstance().getCocktail(widget.cocktailsIds[index]),
                           size: size,
                           context: context,
                         ),

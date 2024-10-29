@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:solvro_cocktails/DataStructures/DataManagerSingleton.dart';
+import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
+import 'package:solvro_cocktails/Services/QueryOptions.dart';
 
 import '../MainPage/MainPage.dart';
 
@@ -16,7 +17,7 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
-    DataManagerSingleton.getInstance().loadNextCocktails();
+    DataManagerSingleton.getInstance().load(QueryOptions());
     waitAndNavigate();
   }
 

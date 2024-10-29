@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
-import 'package:solvro_cocktails/DataStructures/DataManagerSingleton.dart';
+import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
 import 'package:solvro_cocktails/MainPage/CocktailGrid.dart';
+import 'package:solvro_cocktails/Services/QueryOptions.dart';
 
 import 'ICocktailGridProvider.dart';
 
@@ -13,7 +14,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGridProvider {
-  late List<Cocktail> cocktails;
+
+  QueryOptions globalOptions = QueryOptions();
+
+  late List<int> cocktailsIds;
   ScrollController _scrollController = ScrollController();
   late CocktailGrid cocktailGrid;
   bool _isLoadingMore = false;
@@ -21,8 +25,8 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
   @override
   void initState() {
     super.initState();
-    cocktails = DataManagerSingleton.getInstance().currentCocktailSet;
-    cocktailGrid = CocktailGrid(cocktails, gridIndice, _scrollController, this);
+    cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
+    cocktailGrid = CocktailGrid(cocktailsIds, gridIndice, _scrollController, this);
     setState(() {
       _isLoadingMore = false;
     });
@@ -42,12 +46,12 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
       });
     });
 
-    DataManagerSingleton.getInstance().loadNextCocktails();
+    DataManagerSingleton.getInstance().load(globalOptions);
     await Future.delayed(Duration(seconds: 4));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
-        cocktails = DataManagerSingleton.getInstance().currentCocktailSet;
+        cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
         _isLoadingMore = false;
       });
     });
@@ -68,7 +72,7 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
       body: Stack(
          fit: StackFit.expand,
         children: [
-          CocktailGrid(cocktails, gridIndice, _scrollController, this), // Your cocktail grid
+          CocktailGrid(cocktailsIds, gridIndice, _scrollController, this), // Your cocktail grid
           Positioned(
             bottom: 80,
             right: 20,
@@ -107,9 +111,10 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
               onChanged: (text) {
                 print("Text: $text");
                 () async {
-                  await DataManagerSingleton.getInstance().loadBySearch(text);
+                  globalOptions.search = text;
+                  await DataManagerSingleton.getInstance().load(globalOptions);
                   setState(() {
-                    cocktails = DataManagerSingleton.getInstance().currentCocktailSet;
+                    cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
                   });
                 }();
               },
