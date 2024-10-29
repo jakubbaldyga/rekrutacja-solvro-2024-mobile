@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
@@ -64,7 +66,8 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
     _scrollController.dispose();
     super.dispose();
   }
-
+bool _isLoading = false;
+  Timer? _debounce;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,14 +112,7 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
             right: 80,
             child: TextField(
               onChanged: (text) {
-                print("Text: $text");
-                () async {
-                  globalOptions.search = text;
-                  await DataManagerSingleton.getInstance().load(globalOptions);
-                  setState(() {
-                    cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
-                  });
-                }();
+                onTextInput(text);
               },
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
@@ -130,7 +126,28 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
     );
   }
 
+  void onTextInput(text) async {
+      if (_debounce?.isActive ?? false) _debounce!.cancel();
 
+      _debounce = Timer(const Duration(milliseconds: 400), () async {
+
+
+      globalOptions.search = text;
+      print("Search: ${globalOptions.search}");
+
+      // Load the data outside of setState
+      if(await DataManagerSingleton.getInstance().load(globalOptions)) {
+        await Future.delayed(Duration(milliseconds: 300));
+        cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
+        print(cocktailsIds.length);
+        setState(() {
+          print("Search: ${globalOptions.search}!!!!!!!!!!!!!!!!!!!!!!!");
+          _isLoading = false; // Stop loading
+        });
+      }
+
+    });
+  }
 
   @override
   bool isLoadingMore() {

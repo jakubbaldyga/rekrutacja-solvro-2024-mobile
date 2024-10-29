@@ -12,7 +12,7 @@ class DataManagerSingleton {
   static DataManagerSingleton _instance = DataManagerSingleton();
 
   int _loadingCount = 0;
-  int bandwith = 50;
+  int bandwith = 30;
 
   DataCacher _dataCacher = DataCacher();
 
@@ -37,14 +37,13 @@ class DataManagerSingleton {
     return _screenWidth;
   }
 
-  Future<void> load(QueryOptions options) async {
+  //returns true if finished loading
+  Future<bool> load(QueryOptions options) async {
       if(options == currentOptions) {
-        print("same options");
           _loadNextCocktails();
       }
       else
       {
-        print("different options");
           cocktailLists[currentOptions.hashCode] = currentCocktailSet;
 
           currentOptions = options.clone();
@@ -56,6 +55,7 @@ class DataManagerSingleton {
             currentCocktailSet = cocktailLists[currentOptions.hashCode]!;
           }
       }
+      return true;
   }
 
   void _loadNextCocktails() async {
