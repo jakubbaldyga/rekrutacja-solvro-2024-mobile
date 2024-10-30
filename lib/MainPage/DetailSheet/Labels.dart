@@ -72,7 +72,7 @@ class Labels {
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
       child: Text(
-        cocktailToString[cocktail.category]!,
+        cocktail.category!,
         style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         textAlign: TextAlign.center,
       ),

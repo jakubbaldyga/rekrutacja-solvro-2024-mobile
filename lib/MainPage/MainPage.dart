@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
+import 'package:solvro_cocktails/MainPage/FilterWindow.dart';
 import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
 import 'package:solvro_cocktails/MainPage/CocktailGrid.dart';
 import 'package:solvro_cocktails/Services/QueryOptions.dart';
@@ -66,7 +67,7 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
     _scrollController.dispose();
     super.dispose();
   }
-bool _isLoading = false;
+bool _isFilterWindowActive = false;
   Timer? _debounce;
   @override
   Widget build(BuildContext context) {
@@ -76,6 +77,26 @@ bool _isLoading = false;
          fit: StackFit.expand,
         children: [
           CocktailGrid(cocktailsIds, gridIndice, _scrollController, this), // Your cocktail grid
+          Positioned(
+              height: 50,
+              right: 20,
+              width: 50,
+              bottom:  140,
+              child: ElevatedButton(
+                onPressed: () async {
+                    setState(() {
+                      _isFilterWindowActive = !_isFilterWindowActive;
+                    });
+                    if(!_isFilterWindowActive) {
+                      if(FilterWindow.changed) {
+                        print("hello there");
+                        await loadCocktails();
+                      }
+                    }
+                  },
+                child: Text("F"),
+              ),
+          ),
           Positioned(
             bottom: 80,
             right: 20,
@@ -120,7 +141,19 @@ bool _isLoading = false;
               ),
             ),
           ),
-
+          Align(
+              alignment: Alignment.center,
+              child: Builder(
+                builder: (context) {
+                  if(_isFilterWindowActive) {
+                    return FilterWindow(globalOptions);
+                  }
+                  else {
+                    return Container();
+                  }
+                },
+              )
+          )
         ],
       ),
     );
@@ -130,23 +163,20 @@ bool _isLoading = false;
       if (_debounce?.isActive ?? false) _debounce!.cancel();
 
       _debounce = Timer(const Duration(milliseconds: 400), () async {
-
-
       globalOptions.search = text;
-      print("Search: ${globalOptions.search}");
-
-      // Load the data outside of setState
-      if(await DataManagerSingleton.getInstance().load(globalOptions)) {
-        await Future.delayed(Duration(milliseconds: 300));
-        cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
-        print(cocktailsIds.length);
-        setState(() {
-          print("Search: ${globalOptions.search}!!!!!!!!!!!!!!!!!!!!!!!");
-          _isLoading = false; // Stop loading
-        });
-      }
-
+      await loadCocktails();
     });
+  }
+
+  Future<void> loadCocktails() async {
+    if(await DataManagerSingleton.getInstance().load(globalOptions)) {
+      await Future.delayed(Duration(milliseconds: 300));
+      cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
+      print(cocktailsIds.length);
+      setState(() {
+        FilterWindow.changed = false;
+      });
+    }
   }
 
   @override

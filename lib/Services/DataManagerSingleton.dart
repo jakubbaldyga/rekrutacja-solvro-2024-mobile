@@ -40,7 +40,7 @@ class DataManagerSingleton {
   //returns true if finished loading
   Future<bool> load(QueryOptions options) async {
       if(options == currentOptions) {
-          _loadNextCocktails();
+          await _loadNextCocktails();
       }
       else
       {
@@ -49,7 +49,7 @@ class DataManagerSingleton {
           currentOptions = options.clone();
           if(cocktailLists[currentOptions.hashCode] == null) {
             currentCocktailSet = [];
-            _loadNextCocktails();
+            await _loadNextCocktails();
           }
           else{
             currentCocktailSet = cocktailLists[currentOptions.hashCode]!;
@@ -58,7 +58,7 @@ class DataManagerSingleton {
       return true;
   }
 
-  void _loadNextCocktails() async {
+  Future<void> _loadNextCocktails() async {
     // Ensure only one instance is loading at a time
     if (_loadingCount > 0) return;
 

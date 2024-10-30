@@ -13,7 +13,7 @@ class QueryOptions {
     String prompt = _apiDomain + "page=$page&perPage=$count";
 
     if(search != null && search != "") {
-      prompt += "&name=${Uri.encodeFull(search!)}";
+      prompt += "&name=%${Uri.encodeFull(search!)}%";
     }
 
     if(alcoholic != null) {
@@ -21,7 +21,7 @@ class QueryOptions {
     }
 
     if(category != null) {
-      prompt+="&category=${Uri.encodeFull(cocktailToString[category]!)}";
+      prompt+="&category=${Uri.encodeFull(category!)}";
     }
 
     if(glass != null) {
@@ -65,6 +65,6 @@ class QueryOptions {
   static const _apiDomain = "https://cocktails.solvro.pl/api/v1/cocktails?";
   String? search;
   bool? alcoholic;
-  CocktailCategory? category;
+  String? category;
   String? glass;
 }

@@ -13,8 +13,6 @@ json:
 "updatedAt": "2024-08-23T17:36:24.019+00:00"
  */
 
-import 'package:solvro_cocktails/DataStructures/Cocktail/CocktailCategoryEnum.dart';
-
 class Cocktail {
     Cocktail(this.id,
              this.name,
@@ -30,7 +28,7 @@ class Cocktail {
         return Cocktail(
             json['id'],
             json['name'],
-            stringToCocktail[json['category']]!,
+            json['category'],
             json['glass'],
             json['instructions'].split("\n"),
             json['imageUrl'],
@@ -47,7 +45,7 @@ class Cocktail {
     List<int> ingredientsIds = [];
     final int id;
     final String name;
-    final CocktailCategory category;
+    final String category;
     final String glass;
     final List<String> instructions;
     final String imageURL;

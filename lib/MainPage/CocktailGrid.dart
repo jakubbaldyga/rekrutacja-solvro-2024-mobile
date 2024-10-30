@@ -14,7 +14,7 @@ class CocktailGrid extends StatefulWidget {
   int gridIndice;
   ICocktailGridProvider provider;
 
-  static final double spacing = 0.0;
+  static final double spacing = 20.0;
   static final List<int> gridOptions = [1, 2, 3];
   static final List<double> tileSizes = [];
 
@@ -113,7 +113,7 @@ class _CocktailGrid extends State<CocktailGrid> {
                       }
 
                       int column = index % CocktailGrid.gridOptions[widget.gridIndice];
-                      double left = column * tileOffset - CocktailGrid.magicOffset - (CocktailGrid.tileSizes[0] - CocktailGrid.tileSizes[widget.gridIndice]) / 2;
+                      double left = column * tileOffset - CocktailGrid.magicOffset - (CocktailGrid.tileSizes[0] - CocktailGrid.tileSizes[widget.gridIndice]) / 2 + CocktailGrid.spacing/2;
 
                       double size = CocktailGrid.tileSizes[0]; // this is always const
                       double scale = CocktailGrid.tileSizes[widget.gridIndice] / CocktailGrid.tileSizes[0]; // this defines actual size <- its needed by scaling animation
@@ -153,7 +153,7 @@ class _CocktailGrid extends State<CocktailGrid> {
 
   void initTileSizes(screenWidth) {
     for (int i = 0; i < CocktailGrid.gridOptions.length; i++) {
-      CocktailGrid.tileSizes.add((screenWidth/ CocktailGrid.gridOptions[i]));
+      CocktailGrid.tileSizes.add(( (screenWidth - CocktailGrid.spacing*CocktailGrid.gridOptions[i])/ CocktailGrid.gridOptions[i]));
     }
   }
 }
