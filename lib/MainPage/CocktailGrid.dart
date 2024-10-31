@@ -49,26 +49,6 @@ class _CocktailGrid extends State<CocktailGrid> {
   @override
   void initState() {
     super.initState();
-
-    // Add a listener to the scroll controller
-    widget.scrollController.addListener(() {
-      // Get the current scroll position
-      double scrollPosition = widget.scrollController.position.pixels;
-
-      // Check if we are at the bottom of the scroll
-      if (scrollPosition >= widget.scrollController.position.maxScrollExtent) {
-        // Load more cocktails when reaching the bottom
-        if (!widget.provider.isLoadingMore()) {
-          widget.provider.loadMoreCocktails();
-        }
-      }
-
-      // Update the view based on scroll position
-      setState(() {
-        shouldUpdate = !shouldUpdate;
-        // You can update any variables here that need to trigger a rebuild
-      });
-    });
   }
 
 
@@ -88,18 +68,16 @@ class _CocktailGrid extends State<CocktailGrid> {
         builder: (context, constraints) {
           initTileSizes(constraints.maxWidth);
           double tileOffset = (CocktailGrid.tileSizes[widget.gridIndice] + CocktailGrid.spacing);
-          // Calculate total grid height based on number of rows and spacing
           double totalHeight = ((widget.cocktailsIds.length / CocktailGrid.gridOptions[widget.gridIndice]).ceil() * tileOffset);
           if (widget.provider.isLoadingMore()) {
-            totalHeight += 60; // Adjust this height based on the loading indicator size
+            totalHeight += 60;
           }
 
-          var topOfTheScreen = widget.scrollController.position.pixels;
           var bottomOfTheScreen = (widget.scrollController.position.pixels +  MediaQuery.of(context).size.height);
 
           return SizedBox(
-            width: constraints.maxWidth, // Full width container
-            height: totalHeight, // Height based on calculated total grid height
+            width: constraints.maxWidth,
+            height: totalHeight,
             child: Column(
               children: [
                 Expanded(
@@ -118,12 +96,6 @@ class _CocktailGrid extends State<CocktailGrid> {
 
                       double size = CocktailGrid.tileSizes[0]; // this is always const
                       double scale = CocktailGrid.tileSizes[widget.gridIndice] / CocktailGrid.tileSizes[0]; // this defines actual size <- its needed by scaling animation
-
-
-                      // Load more cocktails when reaching the end
-                      if (false && !widget.provider.isLoadingMore() && index > widget.cocktailsIds.length - 12) {
-                        widget.provider.loadMoreCocktails();
-                      }
 
                       return AnimatedCocktailTile(
                         cocktailTile: CocktailTile(

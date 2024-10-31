@@ -26,6 +26,9 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
   late CocktailGrid cocktailGrid;
   bool _isLoadingMore = false;
   int gridIndice = 2;
+  bool _isFilterWindowActive = false;
+  Timer? _debounce;
+
   @override
   void initState() {
     super.initState();
@@ -68,8 +71,7 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
     _scrollController.dispose();
     super.dispose();
   }
-bool _isFilterWindowActive = false;
-  Timer? _debounce;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,30 +113,21 @@ bool _isFilterWindowActive = false;
           ),
           Positioned(
             bottom: 20,
-            right: 20,
-            width: 50,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: () {
-                setState(() {
-
-
-                });
-              },
-              child: Text(">"),
-            ),
-          ),
-          Positioned(
-            bottom: 20,
             left: 20,
-            right: 80,
-            child: TextField(
-              onChanged: (text) {
-                onTextInput(text);
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Enter your text',
+            right: 20,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: TextField(
+                onChanged: onTextInput,
+                decoration: InputDecoration(
+                  hintText: "Search for cocktail",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
               ),
             ),
           ),
@@ -190,11 +183,5 @@ bool _isFilterWindowActive = false;
   @override
   bool isLoadingMore() {
     return _isLoadingMore;
-  }
-
-  @override
-  void loadMoreCocktails() {
-    _isLoadingMore = true;
-    //_loadMoreItems();
   }
 }
