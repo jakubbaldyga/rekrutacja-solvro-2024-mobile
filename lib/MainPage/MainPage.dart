@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 import 'package:solvro_cocktails/MainPage/FilterWindow.dart';
 import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
 import 'package:solvro_cocktails/MainPage/CocktailGrid.dart';
@@ -22,7 +21,7 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
   QueryOptions globalOptions = QueryOptions();
 
   late List<int> cocktailsIds;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   late CocktailGrid cocktailGrid;
   bool _isLoadingMore = false;
   int gridIndice = 2;
@@ -54,7 +53,7 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
     });
 
     DataManagerSingleton.getInstance().load(globalOptions);
-    await Future.delayed(Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 4));
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {
@@ -160,7 +159,7 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
 
   Future<void> loadCocktails() async {
     if(await DataManagerSingleton.getInstance().load(globalOptions)) {
-      await Future.delayed(Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 300));
       cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
       print(cocktailsIds.length);
       setState(() {

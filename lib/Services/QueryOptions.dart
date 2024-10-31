@@ -1,5 +1,3 @@
-import '../DataStructures/Cocktail/CocktailCategoryEnum.dart';
-
 class QueryOptions {
 
   QueryOptions({
@@ -10,7 +8,7 @@ class QueryOptions {
   });
 
   String createPrompt(int page, int count) {
-    String prompt = _apiDomain + "page=$page&perPage=$count";
+    String prompt = "${_apiDomain}page=$page&perPage=$count";
 
     if(search != null && search != "") {
       prompt += "&name=%${Uri.encodeFull(search!)}%";

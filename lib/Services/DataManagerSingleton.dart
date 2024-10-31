@@ -1,7 +1,4 @@
-
-import 'package:solvro_cocktails/DataStructures/Cocktail/CocktailCategoryEnum.dart';
 import 'package:solvro_cocktails/Services/ApiService.dart';
-import 'package:solvro_cocktails/DataStructures/Cocktail/CocktailSet.dart';
 import 'package:solvro_cocktails/DataStructures/Ingredient/Ingredient.dart';
 import 'package:solvro_cocktails/Services/DataCacher.dart';
 
@@ -9,12 +6,12 @@ import '../DataStructures/Cocktail/Cocktail.dart';
 import 'QueryOptions.dart';
 
 class DataManagerSingleton {
-  static DataManagerSingleton _instance = DataManagerSingleton();
+  static final DataManagerSingleton _instance = DataManagerSingleton();
 
   int _loadingCount = 0;
   int bandwith = 30;
 
-  DataCacher _dataCacher = DataCacher();
+  final DataCacher _dataCacher = DataCacher();
 
   //int is QueryOptions hashCode
   Map<int, List<int>> cocktailLists = {};

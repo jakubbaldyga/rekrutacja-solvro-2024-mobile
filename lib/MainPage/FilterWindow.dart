@@ -13,7 +13,7 @@ class FilterWindow extends StatefulWidget {
     const DropdownMenuEntry(value: true, label: "true")
   ];
 
-  FilterWindow(this.options);
+  FilterWindow(this.options, {super.key});
 
   @override
   _FilterWindowState createState() => _FilterWindowState();
@@ -29,17 +29,17 @@ class _FilterWindowState extends State<FilterWindow> {
         color: Colors.white,
         borderRadius: BorderRadius.circular(40)
       ),
-      padding: EdgeInsets.all(10),
-      constraints: BoxConstraints(
+      padding: const EdgeInsets.all(10),
+      constraints: const BoxConstraints(
         maxHeight: 300,
         maxWidth: 350
       ),
       child: Column(
         children: [
-          Text("Filter window"),
+          const Text("Filter window"),
           Row(
             children: [
-              Text("Category:"),
+              const Text("Category:"),
               DropdownMenu(
                 dropdownMenuEntries: List.generate(ListCocktailCategory.length, (index) => DropdownMenuEntry(value: ListCocktailCategory[index], label: ListCocktailCategory[index])),
                 initialSelection: widget.options.category ?? "---",
@@ -53,7 +53,7 @@ class _FilterWindowState extends State<FilterWindow> {
           ),
           Row(
             children: [
-              Text("Alcoholic:"),
+              const Text("Alcoholic:"),
               DropdownMenu(
                   dropdownMenuEntries: widget.booleanList,
                   initialSelection: widget.options.alcoholic,

@@ -30,15 +30,15 @@ class _LoadingPageState extends State<LoadingPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Connection Error'),
-            content: Text('No internet connection. Please check your settings.'),
+            title: const Text('Connection Error'),
+            content: const Text('No internet connection. Please check your settings.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                   SystemNavigator.pop(); // Exit the app// Close the dialog
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -48,11 +48,11 @@ class _LoadingPageState extends State<LoadingPage> {
     }
 
     while (DataManagerSingleton.getInstance().isBusy()) {
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
     }
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MainPage()),
+      MaterialPageRoute(builder: (context) => const MainPage()),
     );
   }
 
@@ -63,15 +63,15 @@ class _LoadingPageState extends State<LoadingPage> {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image(
+            const Image(
                 image: AssetImage('assets/loading.png'),
                 fit: BoxFit.cover
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -79,7 +79,7 @@ class _LoadingPageState extends State<LoadingPage> {
                 child:
                   Text(
                     text,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: Colors.black

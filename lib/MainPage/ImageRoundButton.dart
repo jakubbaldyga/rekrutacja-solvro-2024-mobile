@@ -98,7 +98,7 @@ class _ImageRoundButtonState extends State<ImageRoundButton> with SingleTickerPr
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.2),
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
             blurRadius: 6,
             spreadRadius: 1,
           ),
@@ -106,7 +106,7 @@ class _ImageRoundButtonState extends State<ImageRoundButton> with SingleTickerPr
       ),
       child: Align(
         alignment: Alignment.center,
-        child: Container(
+        child: SizedBox(
           height: widget.size - 15,
           width: widget.size - 15,
           child: Image.asset(

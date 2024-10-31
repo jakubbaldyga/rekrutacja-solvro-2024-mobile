@@ -14,12 +14,12 @@ class CocktailGrid extends StatefulWidget {
   int gridIndice;
   ICocktailGridProvider provider;
 
-  static final double spacing = 10.0;
+  static const double spacing = 10.0;
   static final List<int> gridOptions = [1, 2, 3];
   static final List<String> gridImageIcons= ["assets/grid1.png", "assets/grid2.png", "assets/grid3.png"];
   static final List<double> tileSizes = [];
 
-  CocktailGrid(this.cocktailsIds, this.gridIndice, this.scrollController, this.provider);
+  CocktailGrid(this.cocktailsIds, this.gridIndice, this.scrollController, this.provider, {super.key});
 
   static void changeGridCount(gridIndice) {
       gridIndice-=1;
@@ -27,41 +27,23 @@ class CocktailGrid extends StatefulWidget {
   }
 
   @override
-  _CocktailGrid createState() => _CocktailGrid();
+  State<CocktailGrid> createState() => _CocktailGridState();
 }
 
-class _InfiniteScroll extends Column {
-  _InfiniteScroll({child, scrollController}) :
-      super(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              controller: scrollController,
-              child: child,
-            ),
-          ),
-        ],
-      );
-}
-
-class _CocktailGrid extends State<CocktailGrid> {
+class _CocktailGridState extends State<CocktailGrid> {
   var shouldUpdate = false;
-  @override
-  void initState() {
-    super.initState();
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    if(widget.cocktailsIds.isEmpty)
-      return Align(
+    if(widget.cocktailsIds.isEmpty) {
+      return const Align(
           alignment: Alignment(0, 0),
           child:
           Text("No cocktails:(",
               style: TextStyle(color: Colors.white),
           )
       );
+    }
     return _InfiniteScroll(
       scrollController: widget.scrollController,
       child: LayoutBuilder(
@@ -103,7 +85,7 @@ class _CocktailGrid extends State<CocktailGrid> {
                           size: size,
                           context: context,
                         ),
-                        animationDuration: Duration(milliseconds: 300),
+                        animationDuration: const Duration(milliseconds: 300),
                         left: left,
                         top: top,
                         scale: scale,
@@ -129,4 +111,18 @@ class _CocktailGrid extends State<CocktailGrid> {
       CocktailGrid.tileSizes.add(( (screenWidth - CocktailGrid.spacing*CocktailGrid.gridOptions[i])/ CocktailGrid.gridOptions[i]));
     }
   }
+}
+
+class _InfiniteScroll extends Column {
+  _InfiniteScroll({child, scrollController}) :
+      super(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              controller: scrollController,
+              child: child,
+            ),
+          ),
+        ],
+      );
 }

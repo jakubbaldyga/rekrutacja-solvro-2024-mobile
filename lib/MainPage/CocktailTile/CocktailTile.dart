@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image/flutter_image.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 import '../DetailSheet/DetailSheet.dart';
 
@@ -14,8 +12,8 @@ class CocktailTile extends StatelessWidget {
     required this.cocktail,
     required this.size,
     required this.context,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +74,7 @@ class CocktailTile extends StatelessWidget {
 
   Widget _textBackground({width, child}) {
     return Align(
-        alignment: Alignment(0, 0.9),
+        alignment: const Alignment(0, 0.9),
         child: Container(
           width: width,
           padding: const EdgeInsets.all(8.0),

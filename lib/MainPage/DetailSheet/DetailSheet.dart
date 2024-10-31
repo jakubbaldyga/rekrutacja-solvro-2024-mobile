@@ -70,14 +70,14 @@ class DetailBottomSheet extends StatelessWidget {
     );
   }
 
-  Container _imageContent() {
-    return Container(
+  SizedBox _imageContent() {
+    return SizedBox(
       height: 300,
       child: ClipPath(
         clipper: BottomRoundedClipper(),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
             image: DecorationImage(
               image: cocktail.image,
               fit: BoxFit.fitWidth,
@@ -95,7 +95,7 @@ class DetailBottomSheet extends StatelessWidget {
               right: 0,
               bottom: 0,
               child: Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: borderRadius
                 ),
@@ -123,7 +123,7 @@ class DetailBottomSheet extends StatelessWidget {
   Padding _ingredientsTitle() {
     return const Padding(
       padding: EdgeInsets.only(top: titleTopPadding),
-      child: const Text(
+      child: Text(
         "Ingredients:",
         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         textAlign: TextAlign.center,
@@ -145,17 +145,17 @@ class DetailBottomSheet extends StatelessWidget {
   Widget _buildCard(Ingredient ingredient) {
     return Container(
       width: 140,
-      margin: EdgeInsets.all(padding),
+      margin: const EdgeInsets.all(padding),
       child: Card(
         elevation: 5,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: borderRadius,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
               child: Image(
                 image: ingredient.image,
                 height: 100,
@@ -170,13 +170,13 @@ class DetailBottomSheet extends StatelessWidget {
                 children: [
                   Text(
                     ingredient.name,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: padding),
+                  const SizedBox(height: padding),
                   Text(
                     ingredient.measure ?? "",
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                     textAlign: TextAlign.center,
                   ),
                 ],

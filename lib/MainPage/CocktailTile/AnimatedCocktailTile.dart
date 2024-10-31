@@ -10,12 +10,12 @@ class AnimatedCocktailTile extends StatelessWidget {
   final double scale;
 
   const AnimatedCocktailTile({
+    super.key,
     required this.cocktailTile,
     required this.animationDuration,
     required this.left,
     required this.top,
     required this.scale,
-    Key? key,
   });
 
   @override

@@ -1,8 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-import '../../DataStructures/Cocktail/CocktailCategoryEnum.dart';
-
 class Labels {
   static Container favouriteButton() {
     return Container(
@@ -11,9 +9,9 @@ class Labels {
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      child: Text(
+      child: const Text(
         "favourite",
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         textAlign: TextAlign.center,
       ),
     );

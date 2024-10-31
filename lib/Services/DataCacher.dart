@@ -3,8 +3,8 @@ import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 import 'package:solvro_cocktails/DataStructures/Ingredient/Ingredient.dart';
 
 class DataCacher {
-  Map<int, Cocktail> _cocktailCache = {};
-  Map<int, Ingredient> _ingredientCache = {};
+  final Map<int, Cocktail> _cocktailCache = {};
+  final Map<int, Ingredient> _ingredientCache = {};
 
   void cacheCocktail(Cocktail cocktail) {
     _cocktailCache[cocktail.id] = cocktail;
