@@ -11,7 +11,7 @@ class Ingredient {
       this.alcohol,
       this.type,
       this.percentage,
-      this.imageUrl,
+      imageUrl,
       this.createdAt,
       this.updatedAt,
       this.measure): image = imageUrl != null
@@ -25,7 +25,6 @@ class Ingredient {
   final bool? alcohol;
   final String? type;
   final int? percentage;
-  final String? imageUrl;
   final ImageProvider image;
   final DateTime? createdAt;
   final DateTime? updatedAt;

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:solvro_cocktails/DataStructures/Cocktail/Cocktail.dart';
 import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
@@ -14,7 +16,6 @@ class DetailBottomSheet extends StatelessWidget {
   static const double padding = 8;
   static const double titleTopPadding = 16;
   static const AssetImage defaultIngridientImage = AssetImage("assets/default_ingredient_icon.png");
-
   DetailBottomSheet(this.cocktail, {super.key}) : ingredients = DataManagerSingleton.getInstance().getIngredients(cocktail);
 
   @override
@@ -41,11 +42,6 @@ class DetailBottomSheet extends StatelessWidget {
           height: 5000,
         ),
         _imageContent(),
-        Positioned(
-          top: 10,
-          left: 10,
-          child: Labels.favouriteButton(),
-        ),
         Positioned(
           top: 10,
           right: 10,

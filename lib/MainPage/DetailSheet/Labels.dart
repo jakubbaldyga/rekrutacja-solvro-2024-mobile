@@ -2,20 +2,6 @@
 import 'package:flutter/material.dart';
 
 class Labels {
-  static Container favouriteButton() {
-    return Container(
-      padding: const EdgeInsets.all(7),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: const Text(
-        "favourite",
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-    );
-  }
 
   static Container cocktailLabel(cocktail) {
     return Container(

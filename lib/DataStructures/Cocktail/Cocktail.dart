@@ -7,7 +7,7 @@ class Cocktail {
              this.category,
              this.glass,
              this.instructions,
-             this.imageURL,
+             imageURL,
              this.alcoholic,
              this.createdAt,
              this.updatedAt): image = CachedNetworkImageProvider(imageURL);
@@ -36,7 +36,6 @@ class Cocktail {
     final String category;
     final String glass;
     final String instructions;
-    final String imageURL;
     final ImageProvider image;
     final bool alcoholic;
     final DateTime createdAt;
