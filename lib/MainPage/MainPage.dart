@@ -1,86 +1,91 @@
-import 'dart:async';
+  import 'dart:async';
 
-import 'package:flutter/material.dart';
-import 'package:solvro_cocktails/MainPage/FilterWindow.dart';
-import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
-import 'package:solvro_cocktails/MainPage/CocktailGrid.dart';
-import 'package:solvro_cocktails/Services/QueryOptions.dart';
+  import 'package:flutter/material.dart';
+  import 'package:solvro_cocktails/MainPage/FilterWindow.dart';
+  import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
+  import 'package:solvro_cocktails/MainPage/CocktailGrid.dart';
+  import 'package:solvro_cocktails/Services/QueryOptions.dart';
 
-import 'ICocktailGridProvider.dart';
-import 'ImageRoundButton.dart';
+  import 'ICocktailGridProvider.dart';
+  import 'ImageRoundButton.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  class MainPage extends StatefulWidget {
+    const MainPage({super.key});
 
-  @override
-  State<MainPage> createState() => _InfiniteScrollExampleState();
-}
-
-class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGridProvider {
-
-  QueryOptions globalOptions = QueryOptions();
-
-  late List<int> cocktailsIds;
-  final ScrollController _scrollController = ScrollController();
-  late CocktailGrid cocktailGrid;
-  bool _isLoadingMore = false;
-  int gridIndice = 2;
-  bool _isFilterWindowActive = false;
-  Timer? _debounce;
-
-  @override
-  void initState() {
-    super.initState();
-    cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
-    cocktailGrid = CocktailGrid(cocktailsIds, gridIndice, _scrollController, this);
-    setState(() {
-      _isLoadingMore = false;
-    });
-
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent/2 && !_isLoadingMore) {
-        _loadMoreItems();
-
-      }
-    });
+    @override
+    State<MainPage> createState() => _InfiniteScrollExampleState();
   }
 
-  void _loadMoreItems() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _isLoadingMore = true;
-      });
-    });
+  class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGridProvider {
 
-    DataManagerSingleton.getInstance().load(globalOptions);
-    await Future.delayed(const Duration(seconds: 4));
+    QueryOptions globalOptions = QueryOptions();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    late List<int> cocktailsIds;
+    final ScrollController _scrollController = ScrollController();
+    late CocktailGrid cocktailGrid;
+    bool _isLoadingMore = false;
+    int gridIndice = 2;
+    bool _isFilterWindowActive = false;
+    Timer? _debounce;
+
+    @override
+    void initState() {
+      super.initState();
+      cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
+      cocktailGrid = CocktailGrid(cocktailsIds, gridIndice, _scrollController, this);
       setState(() {
-        cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
         _isLoadingMore = false;
       });
-    });
 
-  }
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent/2 && !_isLoadingMore) {
+          _loadMoreItems();
+
+        }
+      });
+    }
+
+    void _loadMoreItems() async {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          _isLoadingMore = true;
+        });
+      });
+
+      DataManagerSingleton.getInstance().load(globalOptions);
+      await Future.delayed(const Duration(seconds: 4));
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        setState(() {
+          cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
+          _isLoadingMore = false;
+        });
+      });
+
+    }
 
 
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+    @override
+    void dispose() {
+      _scrollController.dispose();
+      super.dispose();
+    }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-         fit: StackFit.expand,
-        children: [
-          backgroundImage(),
-          CocktailGrid(cocktailsIds, gridIndice, _scrollController, this),
-          ImageRoundButton(
+    @override
+    Widget build(BuildContext context) {
+       return backgroundImage(
+          child: content(),
+       );
+    }
+
+    Scaffold content() {
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            CocktailGrid(cocktailsIds, gridIndice, _scrollController, this),
+            ImageRoundButton(
               size: 50,
               right: 20,
               bottom:  140,
@@ -97,8 +102,8 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
                 }
               },
 
-          ),
-          ImageRoundButton(
+            ),
+            ImageRoundButton(
               size: 50,
               bottom: 80,
               right: 20,
@@ -109,78 +114,83 @@ class _InfiniteScrollExampleState extends State<MainPage> implements ICocktailGr
                 });
               },
               imagePath: CocktailGrid.gridImageIcons[gridIndice],
+            ),
+            textField(),
+            Align(
+                alignment: Alignment.center,
+                child: Builder(
+                  builder: (context) {
+                    if(_isFilterWindowActive) {
+                      return FilterWindow(globalOptions);
+                    }
+                    else {
+                      return Container();
+                    }
+                  },
+                )
+            )
+          ],
+        ),
+      );
+    }
+
+    Container backgroundImage({Widget? child}) {
+      return Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/background.jpg"),
+            fit: BoxFit.cover,
           ),
-          Positioned(
-            bottom: 20,
-            left: 20,
-            right: 20,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
+        ),
+        child: child,
+      );
+    }
+
+    Positioned textField() {
+      return Positioned(
+        bottom: 20,
+        left: 20,
+        right: 20,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: TextField(
+            onChanged: onTextInput,
+            decoration: InputDecoration(
+              hintText: "Search for cocktail",
+              border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(100),
-              ),
-              child: TextField(
-                onChanged: onTextInput,
-                decoration: InputDecoration(
-                  hintText: "Search for cocktail",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                ),
               ),
             ),
           ),
-          Align(
-              alignment: Alignment.center,
-              child: Builder(
-                builder: (context) {
-                  if(_isFilterWindowActive) {
-                    return FilterWindow(globalOptions);
-                  }
-                  else {
-                    return Container();
-                  }
-                },
-              )
-          )
-        ],
-      ),
-    );
-  }
+        ),
+      );
+    }
 
-  void onTextInput(text) async {
-      if (_debounce?.isActive ?? false) _debounce!.cancel();
+    void onTextInput(text) async {
+        if (_debounce?.isActive ?? false) _debounce!.cancel();
 
-      _debounce = Timer(const Duration(milliseconds: 400), () async {
-      globalOptions.search = text;
-      await loadCocktails();
-    });
-  }
-
-  Future<void> loadCocktails() async {
-    if(await DataManagerSingleton.getInstance().load(globalOptions)) {
-      await Future.delayed(const Duration(milliseconds: 300));
-      cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
-      print(cocktailsIds.length);
-      setState(() {
-        FilterWindow.changed = false;
+        _debounce = Timer(const Duration(milliseconds: 400), () async {
+        globalOptions.search = text;
+        await loadCocktails();
       });
     }
-  }
 
-  Container backgroundImage() {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/background.jpg"),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
+    Future<void> loadCocktails() async {
+      if(await DataManagerSingleton.getInstance().load(globalOptions)) {
+        await Future.delayed(const Duration(milliseconds: 300));
+        cocktailsIds = DataManagerSingleton.getInstance().currentCocktailSet;
+        print(cocktailsIds.length);
+        setState(() {
+          FilterWindow.changed = false;
+        });
+      }
+    }
 
-  @override
-  bool isLoadingMore() {
-    return _isLoadingMore;
+    @override
+    bool isLoadingMore() {
+      return _isLoadingMore;
+    }
   }
-}
