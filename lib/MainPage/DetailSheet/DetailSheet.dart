@@ -10,38 +10,29 @@ class DetailBottomSheet extends StatelessWidget {
   final List<Ingredient> ingredients;
   ScrollController scrollController = ScrollController();
 
+  static const BorderRadius borderRadius = BorderRadius.all(Radius.circular(19));
+  static const double padding = 8;
+  static const AssetImage defaultIngridientImage = AssetImage("assets/default_ingredient_icon.png");
+
   DetailBottomSheet(this.cocktail, {super.key}) : ingredients = DataManagerSingleton.getInstance().getIngredients(cocktail);
 
   @override
   Widget build(BuildContext context) {
     return DraggableScrollableSheet(
-      initialChildSize: 0.8,  // Start at 0.8 of screen height
-      minChildSize: 0.4,      // Minimum height allowed
-      maxChildSize: 0.9,      // Maximum height allowed (full screen)
+      initialChildSize: 0.9,
+      minChildSize: 0.4,
+      maxChildSize: 0.9,
       builder: (BuildContext context, ScrollController scrollController2) {
         return Stack(
           children: [
-            _topContent(),
-
-            SingleChildScrollView(
-              controller: scrollController2,
-              physics: BouncingScrollPhysics(),
-              child: Container(
-                child: _content(context),
-              )
-            ),
+            _content(context),
+            _topContent()
           ],
         );
-
-        //   SingleChildScrollView(
-        //   controller: scrollController,
-        //   physics: BouncingScrollPhysics(),
-        //   child: _content(scrollController, context),
-        // );
       },
     );
   }
-
+  
   Widget _topContent() {
     return Stack(
       children: [
@@ -49,7 +40,7 @@ class DetailBottomSheet extends StatelessWidget {
           height: 5000,
         ),
         _imageContent(),
-          Positioned(
+        Positioned(
           top: 10,
           left: 10,
           child: Labels.favouriteButton(),
@@ -78,115 +69,98 @@ class DetailBottomSheet extends StatelessWidget {
     );
   }
 
-
-
-  Widget _content(context) {
-    return Column(
-      children: [
-        Stack(
-          children: [
-            Container(
-              height: 5000,
+  Container _imageContent() {
+    return Container(
+      height: 300,
+      child: ClipPath(
+        clipper: BottomRoundedClipper(),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            image: DecorationImage(
+              image: NetworkImage(cocktail.imageURL),
+              fit: BoxFit.fitWidth,
             ),
-            Positioned(
-              top: 250, // Adjust to your needs
+          ),
+        ),
+      ),
+    );
+  }
+
+  Positioned _content(context) {
+          return Positioned(
+              top: 250,
               left: 0,
               right: 0,
-              bottom: 0, // Allow it to expand to the bottom of the Stack,
+              bottom: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: borderRadius
+                ),
                 child: Column(
                   children: [
                     Expanded(
                         child: SingleChildScrollView(
                           controller: scrollController,
                           child: Column(
-                            children: [
-                              _ingridientsContent(),
-                              _instructionsContent(),
-                            ],
+                              children: [
+                                _ingredientsTitle(),
+                                _ingridientsContent(),
+                                _instructionsContent(),
+                              ],
+                            )
                           ),
-                        )
                     ),
                   ],
-              ),
-            ),
-    ],
-        ),
+                ),
+              )
+            );
+  }
 
-    // ) _ingridientsContent(),
-    //     ),
-    //     Positioned(
-    //       top: 430,
-    //       left: 0,
-    //       right: 0,
-    //       child: _instructionsContent(scrollController),
-    //     ),
-      ],
+
+  Text _ingredientsTitle() {
+    return const Text(
+      "Ingredients:",
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      textAlign: TextAlign.center,
     );
   }
 
-  Container _imageContent() {
-    return Container(
-      height: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        image: DecorationImage(
-          image: NetworkImage(cocktail.imageURL),
-          fit: BoxFit.fitWidth,
-        ),
-      ),
-    );
+  SingleChildScrollView _ingridientsContent() {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: ingredients.map((ingredient) => _buildCard(ingredient)).toList(),
+        )
+      );
   }
 
-  Container _ingridientsContent() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          const Text(
-            "Ingredients:",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: ingredients.map((ingredient) => _buildCard(ingredient)).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+
 
   Widget _buildCard(Ingredient ingredient) {
     return Container(
       width: 140,
-      margin: EdgeInsets.symmetric(horizontal: 8),
+      margin: EdgeInsets.all(padding),
       child: Card(
         elevation: 5,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: borderRadius,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Add the ingredient image at the top of the card
             ClipRRect(
               borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-              child: Image.network(
-                ingredient.imageUrl?? 'https://static-00.iconduck.com/assets.00/fluid-icon-2048x2048-wswzeuvy.png',
-                height: 100, // Adjust the height as needed
+              child: Image(
+                image: ingredient.image,
+                height: 100,
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(padding),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -195,7 +169,7 @@ class DetailBottomSheet extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: padding),
                   Text(
                     ingredient.measure ?? "",
                     style: TextStyle(fontSize: 14),
@@ -212,36 +186,55 @@ class DetailBottomSheet extends StatelessWidget {
 
 
   Widget _instructionsContent() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: Text(
-          _constructCocktailString(),
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+      return Center(
+        child: Padding(
+            padding: const EdgeInsets.only(left: padding, right: padding, top: padding),
+            child: Text(
+              _constructCocktailString(),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          )
+      );
   }
 
   String _constructCocktailString() {
     String result = "";
-    result += "Instructions:\n";
+    result += "Instructions:";
 
     int constructionIndex = 1;
     for (String instruction in cocktail.instructions) {
-      result += "$constructionIndex) $instruction\n";
+      result += "\n$constructionIndex) $instruction";
       constructionIndex++;
     }
 
-    for(int i = 0; i < 5; i++) {
-      result += "\n";
-    }
-
     return result;
+  }
+}
+
+class BottomRoundedClipper extends CustomClipper<Path> {
+  static const double edgeRound = 19;
+  static const double bottomPadding = 30;
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height-bottomPadding);
+
+    path.quadraticBezierTo(0, size.height - edgeRound - bottomPadding,
+                           edgeRound, size.height-edgeRound-bottomPadding);
+
+    path.lineTo(size.width-edgeRound, size.height-edgeRound-bottomPadding);
+
+    path.quadraticBezierTo(size.width, size.height-edgeRound-bottomPadding,
+                           size.width, size.height-bottomPadding);
+
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return false;
   }
 }

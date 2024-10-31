@@ -108,7 +108,7 @@ class _CocktailGrid extends State<CocktailGrid> {
                       int row = index ~/ CocktailGrid.gridOptions[widget.gridIndice];
                       double top = row * tileOffset - (CocktailGrid.tileSizes[0] - CocktailGrid.tileSizes[widget.gridIndice]) / 2;
 
-                      if(top > bottomOfTheScreen || top + CocktailGrid.tileSizes[0] < topOfTheScreen) {
+                      if(top > 3*bottomOfTheScreen) {
                         return Container();
                       }
 
