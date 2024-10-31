@@ -204,13 +204,7 @@ class DetailBottomSheet extends StatelessWidget {
 
   String _constructCocktailString() {
     String result = "";
-    result += "Instructions:";
-
-    int constructionIndex = 1;
-    for (String instruction in cocktail.instructions) {
-      result += "\n$constructionIndex) $instruction";
-      constructionIndex++;
-    }
+    result += "Instructions:\n${cocktail.instructions}";
 
     return result;
   }

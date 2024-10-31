@@ -88,7 +88,7 @@
             ImageRoundButton(
               size: 50,
               right: 20,
-              bottom:  140,
+              bottom:  150,
               imagePath: "assets/filter_icon.png",
               onPressed: () async {
                 setState(() {
@@ -105,7 +105,7 @@
             ),
             ImageRoundButton(
               size: 50,
-              bottom: 80,
+              bottom: 90,
               right: 20,
               onPressed: () {
                 setState(() {
@@ -116,19 +116,7 @@
               imagePath: CocktailGrid.gridImageIcons[gridIndice],
             ),
             textField(),
-            Align(
-                alignment: Alignment.center,
-                child: Builder(
-                  builder: (context) {
-                    if(_isFilterWindowActive) {
-                      return FilterWindow(globalOptions);
-                    }
-                    else {
-                      return Container();
-                    }
-                  },
-                )
-            )
+            showFilterWindowIfShould(),
           ],
         ),
       );
@@ -166,6 +154,22 @@
             ),
           ),
         ),
+      );
+    }
+
+    Builder showFilterWindowIfShould() {
+      return Builder(
+        builder: (context) {
+          if(_isFilterWindowActive) {
+            return Align(
+              alignment: Alignment.center, // Center it on the screen
+              child: FilterWindow(globalOptions),
+            );
+          }
+          else {
+            return Container();
+          }
+        },
       );
     }
 

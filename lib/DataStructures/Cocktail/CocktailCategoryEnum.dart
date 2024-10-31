@@ -12,7 +12,7 @@ enum CocktailCategory {
 }
 
 const List<String> ListCocktailCategory = [
-  "---",
+  "Any",
   "Cocktail",
   "Ordinary_Drink",
   "Punch_Party_Drink",

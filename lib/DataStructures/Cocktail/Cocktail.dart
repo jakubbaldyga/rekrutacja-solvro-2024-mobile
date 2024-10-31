@@ -18,7 +18,7 @@ class Cocktail {
             json['name'],
             json['category'],
             json['glass'],
-            json['instructions'].split("\n"),
+            json['instructions'],
             json['imageUrl'],
             json['alcoholic'],
             DateTime.parse(json['createdAt']),
@@ -35,7 +35,7 @@ class Cocktail {
     final String name;
     final String category;
     final String glass;
-    final List<String> instructions;
+    final String instructions;
     final String imageURL;
     final ImageProvider image;
     final bool alcoholic;

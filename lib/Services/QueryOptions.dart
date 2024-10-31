@@ -2,6 +2,7 @@ class QueryOptions {
 
   QueryOptions({
     this.search,
+    this.sortBy,
     this.alcoholic,
     this.category,
     this.glass
@@ -19,13 +20,17 @@ class QueryOptions {
     }
 
     if(category != null) {
-      prompt+="&category=${Uri.encodeFull(category!)}";
+      prompt+="&category=${Uri.encodeComponent(category!)}";
     }
 
     if(glass != null) {
-      prompt+="&glass=${Uri.encodeFull(glass!)}";
+      prompt+="&glass=${Uri.encodeComponent(glass!)}";
     }
 
+    if(sortBy != null) {
+      prompt+="&sort=${Uri.encodeComponent(sortBy!)}";
+    }
+    print(prompt);
     return prompt;
   }
 
@@ -38,6 +43,7 @@ class QueryOptions {
       if (other is! QueryOptions) return false;
 
       return search == other.search
+          && sortBy == other.sortBy
           && alcoholic == other.alcoholic
           && category == other.category
           && glass == other.glass;
@@ -46,6 +52,7 @@ class QueryOptions {
   QueryOptions clone() {
     return QueryOptions(
       search: search,
+      sortBy: sortBy,
       alcoholic: alcoholic,
       category: category,
       glass: glass
@@ -55,6 +62,7 @@ class QueryOptions {
   @override
   int get hashCode {
     return search.hashCode ^
+    sortBy.hashCode ^
     (alcoholic?.hashCode ?? 0) ^
     (category?.hashCode ?? 0) ^
     (glass?.hashCode ?? 0);
@@ -62,6 +70,7 @@ class QueryOptions {
 
   static const _apiDomain = "https://cocktails.solvro.pl/api/v1/cocktails?";
   String? search;
+  String? sortBy;
   bool? alcoholic;
   String? category;
   String? glass;
