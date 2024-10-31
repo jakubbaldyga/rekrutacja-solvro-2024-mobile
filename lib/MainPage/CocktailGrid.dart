@@ -16,6 +16,7 @@ class CocktailGrid extends StatefulWidget {
 
   static final double spacing = 10.0;
   static final List<int> gridOptions = [1, 2, 3];
+  static final List<String> gridImageIcons= ["assets/grid1.png", "assets/grid2.png", "assets/grid3.png"];
   static final List<double> tileSizes = [];
 
   CocktailGrid(this.cocktailsIds, this.gridIndice, this.scrollController, this.provider);

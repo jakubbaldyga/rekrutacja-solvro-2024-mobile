@@ -8,6 +8,7 @@ import 'package:solvro_cocktails/MainPage/CocktailGrid.dart';
 import 'package:solvro_cocktails/Services/QueryOptions.dart';
 
 import 'ICocktailGridProvider.dart';
+import 'ImageRoundButton.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -77,41 +78,36 @@ bool _isFilterWindowActive = false;
          fit: StackFit.expand,
         children: [
           backgroundImage(),
-          CocktailGrid(cocktailsIds, gridIndice, _scrollController, this), // Your cocktail grid
-          Positioned(
-              height: 50,
+          CocktailGrid(cocktailsIds, gridIndice, _scrollController, this),
+          ImageRoundButton(
+              size: 50,
               right: 20,
-              width: 50,
               bottom:  140,
-              child: ElevatedButton(
-                onPressed: () async {
-                    setState(() {
-                      _isFilterWindowActive = !_isFilterWindowActive;
-                    });
-                    if(!_isFilterWindowActive) {
-                      if(FilterWindow.changed) {
-                        print("hello there");
-                        await loadCocktails();
-                      }
-                    }
-                  },
-                child: Text("F"),
-              ),
+              imagePath: "assets/filter_icon.png",
+              onPressed: () async {
+                setState(() {
+                  _isFilterWindowActive = !_isFilterWindowActive;
+                });
+                if(!_isFilterWindowActive) {
+                  if(FilterWindow.changed) {
+                    print("Filters changed");
+                    await loadCocktails();
+                  }
+                }
+              },
+
           ),
-          Positioned(
-            bottom: 80,
-            right: 20,
-            width: 50,
-            height: 50,
-            child: ElevatedButton(
+          ImageRoundButton(
+              size: 50,
+              bottom: 80,
+              right: 20,
               onPressed: () {
                 setState(() {
                   gridIndice+=1;
                   if(gridIndice == CocktailGrid.gridOptions.length) gridIndice = 0;
                 });
               },
-              child: Text("#"),
-            ),
+              imagePath: CocktailGrid.gridImageIcons[gridIndice],
           ),
           Positioned(
             bottom: 20,

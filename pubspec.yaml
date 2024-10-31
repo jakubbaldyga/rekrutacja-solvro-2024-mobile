@@ -64,6 +64,10 @@ flutter:
   assets:
     - assets/background.jpg
     - assets/loading.png
+    - assets/filter_icon.png
+    - assets/grid1.png
+    - assets/grid2.png
+    - assets/grid3.png
     - assets/default_ingredient_icon.png
   # To add assets to your application, add an assets section, like this:
   # assets:
