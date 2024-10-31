@@ -19,6 +19,7 @@ class _LoadingPageState extends State<LoadingPage> {
   @override
   void initState() {
     super.initState();
+    DataManagerSingleton.getInstance().loadCategoriesAndGlasses();
     DataManagerSingleton.getInstance().load(QueryOptions());
     waitAndNavigate();
   }

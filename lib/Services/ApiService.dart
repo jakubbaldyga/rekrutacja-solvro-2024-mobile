@@ -62,4 +62,25 @@ class ApiService {
     }
   }
 
+  static Future<List<String>> fetchCategories() async {
+    final response = await http.get(Uri.parse('https://cocktails.solvro.pl/api/v1/cocktails/categories'));
+
+    if (response.statusCode == 200) {
+      final List<String> jsonResponse = List<String>.from(json.decode(response.body)['data']);
+      return jsonResponse;
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  static Future<List<String>> fetchGlasses() async {
+    final response = await http.get(Uri.parse('https://cocktails.solvro.pl/api/v1/cocktails/glasses'));
+
+    if (response.statusCode == 200) {
+      final List<String> jsonResponse = List<String>.from(json.decode(response.body)['data']);
+      return jsonResponse;
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 }

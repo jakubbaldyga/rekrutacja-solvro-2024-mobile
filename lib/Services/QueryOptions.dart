@@ -12,7 +12,7 @@ class QueryOptions {
     String prompt = "${_apiDomain}page=$page&perPage=$count";
 
     if(search != null && search != "") {
-      prompt += "&name=%${Uri.encodeFull(search!)}%";
+      prompt += "&name=%${Uri.encodeComponent(search!)}%";
     }
 
     if(alcoholic != null) {
@@ -37,7 +37,6 @@ class QueryOptions {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) {
-      print("identical");
       return true;
     }
       if (other is! QueryOptions) return false;

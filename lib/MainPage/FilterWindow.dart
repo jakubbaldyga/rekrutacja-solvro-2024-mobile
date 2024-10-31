@@ -1,17 +1,11 @@
 
 import 'package:flutter/material.dart';
-import 'package:solvro_cocktails/DataStructures/Cocktail/CocktailCategoryEnum.dart';
+import 'package:solvro_cocktails/Services/DataManagerSingleton.dart';
 import 'package:solvro_cocktails/Services/QueryOptions.dart';
 
 class FilterWindow extends StatefulWidget {
   QueryOptions options;
   static bool changed = false;
-
-  var booleanList = [
-    const DropdownMenuEntry(value: null, label: "Any"),
-    const DropdownMenuEntry(value: false, label: "false"),
-    const DropdownMenuEntry(value: true, label: "true")
-  ];
 
   FilterWindow(this.options, {super.key});
 
@@ -36,6 +30,7 @@ class _FilterWindowState extends State<FilterWindow> {
         children: [
           filterWindowTitle(),
           categoryRow(),
+          glassRow(),
           alcoholicRow(),
           sortingRow(),
         ]
@@ -56,17 +51,39 @@ class _FilterWindowState extends State<FilterWindow> {
         const Text("Category:\t\t", style: TextStyle(fontSize: 16)),
         const SizedBox(width: 10),
         CustomDropDownMenu(
-            dropdownMenuEntries: List.generate(ListCocktailCategory.length, (index) => DropdownMenuEntry(value: ListCocktailCategory[index], label: ListCocktailCategory[index])),
-            initialSelection: widget.options.category ?? "Any",
+            dropdownMenuEntries: DataManagerSingleton.getInstance().categoryList,
+            initialSelection: widget.options.category,
             onSelected: (value) {
               widget.options.category = value;
-              if(value == "Any") widget.options.category = null;
               FilterWindow.changed = true;
             }
         )
       ],
     );
   }
+
+  Row glassRow() {
+    return Row(
+      children: [
+        const Text("Glass:\t\t", style: TextStyle(fontSize: 16)),
+        const SizedBox(width: 10),
+        CustomDropDownMenu(
+            dropdownMenuEntries: DataManagerSingleton.getInstance().glassList,
+            initialSelection: widget.options.glass,
+            onSelected: (value) {
+              widget.options.glass = value;
+              FilterWindow.changed = true;
+            }
+        )
+      ],
+    );
+  }
+
+  static const List<DropdownMenuEntry> booleanList = [
+    const DropdownMenuEntry(value: null, label: "Any"),
+    const DropdownMenuEntry(value: false, label: "false"),
+    const DropdownMenuEntry(value: true, label: "true")
+  ];
 
   Row alcoholicRow() {
     return Row(
@@ -75,7 +92,7 @@ class _FilterWindowState extends State<FilterWindow> {
         const Text("Alcoholic:\t\t", style: TextStyle(fontSize: 16)),
         const SizedBox(width: 10),
         CustomDropDownMenu(
-          dropdownMenuEntries: widget.booleanList,
+          dropdownMenuEntries: booleanList,
           initialSelection: widget.options.alcoholic,
           onSelected: (value) {
             setState(() {
