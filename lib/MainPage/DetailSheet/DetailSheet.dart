@@ -12,6 +12,7 @@ class DetailBottomSheet extends StatelessWidget {
 
   static const BorderRadius borderRadius = BorderRadius.all(Radius.circular(19));
   static const double padding = 8;
+  static const double titleTopPadding = 16;
   static const AssetImage defaultIngridientImage = AssetImage("assets/default_ingredient_icon.png");
 
   DetailBottomSheet(this.cocktail, {super.key}) : ingredients = DataManagerSingleton.getInstance().getIngredients(cocktail);
@@ -78,7 +79,7 @@ class DetailBottomSheet extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             image: DecorationImage(
-              image: NetworkImage(cocktail.imageURL),
+              image: cocktail.image,
               fit: BoxFit.fitWidth,
             ),
           ),
@@ -106,7 +107,7 @@ class DetailBottomSheet extends StatelessWidget {
                           child: Column(
                               children: [
                                 _ingredientsTitle(),
-                                _ingridientsContent(),
+                                _ingredientsContent(),
                                 _instructionsContent(),
                               ],
                             )
@@ -119,15 +120,18 @@ class DetailBottomSheet extends StatelessWidget {
   }
 
 
-  Text _ingredientsTitle() {
-    return const Text(
-      "Ingredients:",
-      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-      textAlign: TextAlign.center,
+  Padding _ingredientsTitle() {
+    return const Padding(
+      padding: EdgeInsets.only(top: titleTopPadding),
+      child: const Text(
+        "Ingredients:",
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+      )
     );
   }
 
-  SingleChildScrollView _ingridientsContent() {
+  SingleChildScrollView _ingredientsContent() {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(

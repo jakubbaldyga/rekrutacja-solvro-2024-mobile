@@ -76,6 +76,7 @@ bool _isFilterWindowActive = false;
       body: Stack(
          fit: StackFit.expand,
         children: [
+          backgroundImage(),
           CocktailGrid(cocktailsIds, gridIndice, _scrollController, this), // Your cocktail grid
           Positioned(
               height: 50,
@@ -177,6 +178,17 @@ bool _isFilterWindowActive = false;
         FilterWindow.changed = false;
       });
     }
+  }
+
+  Container backgroundImage() {
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/background.jpg"),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 
   @override

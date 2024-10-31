@@ -14,7 +14,7 @@ class CocktailGrid extends StatefulWidget {
   int gridIndice;
   ICocktailGridProvider provider;
 
-  static final double spacing = 20.0;
+  static final double spacing = 10.0;
   static final List<int> gridOptions = [1, 2, 3];
   static final List<double> tileSizes = [];
 
@@ -106,7 +106,7 @@ class _CocktailGrid extends State<CocktailGrid> {
                     children: List.generate(widget.cocktailsIds.length, (index) {
 
                       int row = index ~/ CocktailGrid.gridOptions[widget.gridIndice];
-                      double top = row * tileOffset - (CocktailGrid.tileSizes[0] - CocktailGrid.tileSizes[widget.gridIndice]) / 2;
+                      double top = row * tileOffset - (CocktailGrid.tileSizes[0] - CocktailGrid.tileSizes[widget.gridIndice]) / 2 + CocktailGrid.spacing;
 
                       if(top > 3*bottomOfTheScreen) {
                         return Container();

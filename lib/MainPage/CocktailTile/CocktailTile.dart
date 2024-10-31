@@ -65,7 +65,7 @@ class CocktailTile extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(15 * size*scaleFactor), // Rounded edges
           image: DecorationImage(
-            image:  NetworkImageWithRetry(cocktail.imageURL),
+            image:  cocktail.image,
             fit: BoxFit.cover,
           ),
     ),
